@@ -1,0 +1,158 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div id="app">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        {{titulo}}
+      </div>
+
+      <div class="card-block">
+        <div class="text-center">
+
+          <br>
+          <h5>Pacotes de viagem fácil</h5>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="origem">Origem</label>
+              <input type="text" class="form-control" id="origem" placeholder="Digite o nome" v-model="origem" disabled/>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <div class="form-group col-md-12">
+              <label for="nomeCliente">Destino</label>
+              <select name="tipo" class="form-control" v-on:click="iataCodes()">
+                <option > Escolha seu destino
+                </option>
+                <option v-for="options in cidades">
+                  {{ cidades }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="nomeCliente">Data ida</label>
+              <input type="text" class="form-control" id="ida" placeholder="Digite a data de saida" />
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="nomeCliente"> Data volta</label>
+              <input type="text" class="form-control" id="volta" placeholder="Digite a data de volta" />
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-outline-warning btn-lg btn-block" @click="procuraPacote()">Procurar</button>
+
+          <br></br>
+          <div id= "exibir" v-show >
+          <h5>Pacotes exclusivos</h5>
+
+          <div class="card" style="width: 18rem;">
+              <img :src="" >
+          </div>
+
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  new Vue({
+    created: function() {
+      //
+      this.iataCodes();
+    },
+    el: '#app',
+    data: function() {
+      return {
+        titulo: 'Pacotimo!',
+        origem: 'BELO HORIZONTE',
+        cidades: [],
+        pacote: []
+
+      }
+
+    },
+    methods: {
+
+      consultaFlights() {
+        // Este endpoint traz uma lista de voos de ida e volta.
+
+        var form = this;
+
+        var url = "https://5f637566363f0000162d8b16.mockapi.io/milhas321/api/v1/flights"; //URL
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url, false);
+        xhttp.send();
+
+      },
+
+      iataCodes() {
+        // Traz os códigos IATA das localidades
+
+        var form = this;
+
+        this.cidades = [];
+
+        var url = "https://5f637566363f0000162d8b16.mockapi.io/milhas321/api/v1/iataCodes"; //URL
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url, false);
+        xhttp.send();
+
+        var obj = JSON.parse(xhttp.responseText);
+
+        for (let i = 0; i < obj.length; i = i + 1) {
+          this.cidades[i] = obj[i].city;
+        }
+
+      },
+      consultaHotels() {
+        // Traz informação dos hotéis nas localidades
+
+        var form = this;
+
+        var url = "https://5f637566363f0000162d8b16.mockapi.io/milhas321/api/v1/hotels"; //URL
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url, false);
+        xhttp.send(); //A execução do script para aqui até a requisição retornar do servidor
+
+        console.log(xhttp.responseText);
+
+      },
+
+      procuraPacote() {
+
+        var form = this;
+
+        this.pacote = [];
+
+        var url = "https://5f637566363f0000162d8b16.mockapi.io/milhas321/api/v1/iataCodes"; //URL
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url, false);
+        xhttp.send();
+
+        var obj = JSON.parse(xhttp.responseText);
+
+        for (let i = 0; i < obj.length; i = i + 1) {
+          this.pacote[i] = obj[i].img;
+        }
+      },
+
+
+    }
+  })
+</script>
