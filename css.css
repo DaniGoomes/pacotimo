@@ -1,0 +1,13 @@
+.card{
+  position: absolute;
+  width: 320px;
+  height: 187px;
+  left: 20px;
+  top: 20px;
+
+  background: url(bsb-0.jpg);
+  /* drop geral */
+
+  filter: drop-shadow(-10px -10px 20px #FAFBFF), drop-shadow(10px 10px 20px rgba(166, 171, 189, 0.53));
+  border-radius: 10px;
+}
